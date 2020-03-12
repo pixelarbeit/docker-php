@@ -1,22 +1,19 @@
-FROM php:7.3-fpm-alpine3.8
+FROM php:7.4.3-fpm-alpine3.11
 
-# Install packages
-RUN apk --no-cache add libzip-dev zip freetype libpng libjpeg-turbo freetype-dev libpng-dev libjpeg-turbo-dev
+# Install dependencies
+RUN apk update && apk upgrade
+RUN apk --no-cache add libwebp-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libzip-dev \
+    # libcurl \
+    curl-dev \
+    zip
 
-# Install php extensions
-RUN docker-php-ext-configure zip --with-libzip
-RUN docker-php-ext-install -j$(nproc) mysqli
-RUN docker-php-ext-install -j$(nproc) zip
-RUN docker-php-ext-install -j$(nproc) bcmath
-RUN docker-php-ext-install -j$(nproc) pdo
-RUN docker-php-ext-install -j$(nproc) pdo_mysql
-RUN docker-php-ext-configure gd \
-    --with-gd \
-    --with-freetype-dir=/usr/include/ \
-    --with-png-dir=/usr/include/ \
-    --with-jpeg-dir=/usr/include/
-RUN docker-php-ext-install -j$(nproc) gd
-#RUN docker-php-ext-install -j$(nproc) curl
+# Configure Install php extensions
+RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp
+RUN docker-php-ext-install gd zip mysqli pdo pdo_mysql opcache exif curl
 
 # Add mariadb client
 RUN apk --no-cache add mariadb-client
