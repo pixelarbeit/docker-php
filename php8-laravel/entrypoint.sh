@@ -9,8 +9,8 @@ supervisord
 
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
-	echo "Starting php-fpm"
 	set -- php-fpm "$@"
 fi
 
+echo "Executing \"$@\""
 exec "$@"

@@ -18,3 +18,4 @@ COPY .config/supervisord.conf /etc/supervisord.conf
 RUN echo "* * * * * /usr/local/bin/artisan-schedule.sh" >> /etc/crontabs/root
 
 ENTRYPOINT [ "/entrypoint.sh" ]
+CMD ["php-fpm"]
